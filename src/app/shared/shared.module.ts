@@ -4,6 +4,7 @@ import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { PagesModule } from '../pages/pages.module';
+import { RouterLink, RouterModule } from '@angular/router';
 
 
 
@@ -19,7 +20,9 @@ import { PagesModule } from '../pages/pages.module';
     BreadcrumbsComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule
+
   ]
 })
 export class SharedModule { }
