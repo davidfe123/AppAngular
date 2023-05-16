@@ -7,6 +7,7 @@ import { Observable, of } from 'rxjs';
 import { RegisterForm } from '../interface/register.form.interface';
 import { environment } from 'src/environments/environment';
 import { LoginForm } from '../interface/login.form.interface';
+import { Usuario } from '../models/usuario.model';
 
 declare const google:any;
 
@@ -17,33 +18,46 @@ const base_url = environment.base_url;
 })
 export class UsuarioService {
 
+  public usuario:Usuario;
+
   constructor(private http:HttpClient,
               private router:Router){}
+
+  get token():string{
+    return localStorage.getItem('token') || '';
+  }
+  get uid():string{
+    return this.usuario.uid || '';
+  }
 
   logout(){
     localStorage.removeItem('token');
     const email = localStorage.getItem('email') || ''
     google.accounts.id.revoke( email,()=>{
-      this.router.navigateByUrl('/login')
+      this.router.navigateByUrl('login')
     })
   }
 
   validarToke():Observable<boolean>{
-    const token = localStorage.getItem('token') || '';
+    
 
     return this.http.get(`${base_url}/login/renew`,{
       headers:{
             'Cache-Control': 'no-cache',
             'Pragma': 'no-cache',
             'Expires': 'Sat, 01 Jan 2000 00:00:00 GMT',
-            'x-token': token
+            'x-token': this.token
       }
     }).pipe(
-      tap((resp:any)=>{
+      map((resp:any)=>{
+        const {nombre,email,google,role,img = '',uid} = resp.usuario;
+        this.usuario = new Usuario(nombre,email,'',google,role,img,uid);
         localStorage.setItem('token',resp.token)
+        return true
       }),
-      map(resp => true),
-      catchError(error=> of(false))
+      catchError(error => {
+          return of(false)
+      })
     );
 
   }
@@ -76,5 +90,18 @@ export class UsuarioService {
       })
     )
   }
+
+  actualizarPerfil(data:{ email:string,nombre:string,role:string }){
+      data = {
+        ...data,
+        role:this.usuario.role
+      }
+
+      return this.http.put(`${base_url}/usuario/${this.uid}`,data,{
+        headers:{'x-token':this.token
+        }
+      }
+  )}
+
 
 }
