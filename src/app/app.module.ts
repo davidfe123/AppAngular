@@ -15,15 +15,18 @@ import { AuthModule } from './auth/auth.module';
 
 
 
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
-    NopagesfoundComponent,
+    NopagesfoundComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    PagesModule,
+    
     SharedModule,
     AuthModule
   ],

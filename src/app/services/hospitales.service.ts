@@ -39,5 +39,23 @@ export class HospitalesService {
             )
   }
 
+  crearHospital(nombre:string){
+    const url = `${base_url}/hospitales`;
+    return this.http.post(url,{nombre},this.headers)
+                    
+  }
+
+  editarHospital(_id:string,nombre:string){
+    const url = `${base_url}/hospitales/${_id}`;
+    return this.http.put(url,{nombre},this.headers)
+                    
+  }
+
+  eliminarHospital(_id:string){
+    const url = `${base_url}/hospitales/${_id}`;
+    return this.http.delete(url,this.headers)
+                    
+  }
+
 
 }
