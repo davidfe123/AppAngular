@@ -15,11 +15,9 @@ export class SidebarComponent {
 
   public usuario:Usuario;
 
-  menuItem:any[];
-  constructor(private sidebarService:SiderbarService,
-              private usuarioService:UsuarioService){
 
-    this.menuItem = sidebarService.menu;
+  constructor(public sidebarService:SiderbarService,
+              private usuarioService:UsuarioService){
     this.usuario = usuarioService.usuario;
   }
 
